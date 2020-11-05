@@ -36,6 +36,7 @@ namespace Vidly.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Save(Customer customer)
         {
             if (!ModelState.IsValid)
@@ -67,13 +68,15 @@ namespace Vidly.Controllers
 
         public ActionResult Index()
         {
-            var customers = _context.Customers.Include(c => c.MembershipType).ToList();
+            var customers = _context.Customers.
+                Include(c => c.MembershipType).ToList();
             return View(customers);
         }
 
         public ActionResult Details(int id)
         {
-            var customer = _context.Customers.Include(c => c.MembershipType).SingleOrDefault(c => c.Id == id);
+            var customer = _context.Customers.Include(c => c.MembershipType)
+                .SingleOrDefault(c => c.Id == id);
             if (customer == null)
                 return HttpNotFound();
 
