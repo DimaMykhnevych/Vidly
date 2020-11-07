@@ -26,10 +26,22 @@ namespace Vidly.Controllers.Api
             mapper = config.CreateMapper();
 
         }
-        public IHttpActionResult GetCustomers()
+        public IHttpActionResult GetCustomers(string query = null)
         {
-            var customerDtos = mapper.Map<IEnumerable<CustomerDto>>(_context.Customers
-                .Include(c => c.MembershipType).ToList());
+            var customersQuery = _context.Customers
+                .Include(c => c.MembershipType);
+
+            if (!String.IsNullOrWhiteSpace(query))
+            {
+                customersQuery = customersQuery.Where(c=>c.Name.Contains(query));
+            }
+
+            var customerDtos = customersQuery
+                .ToList()
+                .Select(mapper.Map<Customer, CustomerDto>);
+
+            //var customerDtos = mapper.Map<IEnumerable<CustomerDto>>(_context.Customers
+            //    .Include(c => c.MembershipType).ToList());
             return Ok(customerDtos);
             //return _context.Customers.ToList().Select(mapper.Map<Customer, CustomerDto>);
         }

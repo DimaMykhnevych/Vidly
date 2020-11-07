@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Data.Entity;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace Vidly.Models
 {
-    public class VidlyDbContext: DbContext
+    public class VidlyDbContext: IdentityDbContext<AppUser>
     {
         public VidlyDbContext() { }
         public DbSet<Customer> Customers { get; set; } // My domain models
@@ -15,5 +16,8 @@ namespace Vidly.Models
         public DbSet<Genre> Genres { get; set; }
 
         public DbSet<MembershipType> MembershipTypes { get; set; }
+
+        public DbSet<Rental> Rentals { get; set; }
     }
+
 }
